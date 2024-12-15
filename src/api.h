@@ -19,7 +19,7 @@ extern struct Constructors
 {
     GDExtensionPtrConstructor vector2_constructor_x_y;
     GDExtensionInterfaceStringNewWithUtf8Chars string_new_with_utf8_chars;
-    GDExtensionInterfaceStringNameNewWithUtf8Chars string_name_new_with_utf8_chars;
+    GDExtensionInterfaceStringNameNewWithLatin1Chars string_name_new_with_latin1_chars;
     GDExtensionVariantFromTypeConstructorFunc variant_from_float_constructor;
     GDExtensionTypeFromVariantConstructorFunc float_from_variant_constructor;
     GDExtensionVariantFromTypeConstructorFunc variant_from_string_name_constructor;
@@ -50,6 +50,7 @@ extern struct API
     GDExtensionInterfaceClassdbRegisterExtensionClass2 classdb_register_extension_class2;
     GDExtensionInterfaceClassdbConstructObject classdb_construct_object;
     GDExtensionInterfaceObjectSetInstance object_set_instance;
+    GDExtensionInterfaceObjectSetInstanceBinding object_set_instance_binding;
     GDExtensionInterfaceMemAlloc mem_alloc;
     GDExtensionInterfaceMemFree mem_free;
     GDExtensionInterfaceGetVariantFromTypeConstructor get_variant_from_type_constructor;

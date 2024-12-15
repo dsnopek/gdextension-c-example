@@ -18,11 +18,11 @@ GDExtensionPropertyInfo make_property_full(
 {
 
     StringName *prop_name = api.mem_alloc(sizeof(StringName));
-    constructors.string_name_new_with_utf8_chars(prop_name, name);
+    constructors.string_name_new_with_latin1_chars(prop_name, name, false);
     String *prop_hint_string = api.mem_alloc(sizeof(String));
     constructors.string_new_with_utf8_chars(prop_hint_string, hint_string);
     StringName *prop_class_name = api.mem_alloc(sizeof(StringName));
-    constructors.string_name_new_with_utf8_chars(prop_class_name, class_name);
+    constructors.string_name_new_with_latin1_chars(prop_class_name, class_name, false);
 
     GDExtensionPropertyInfo info = {
         .name = prop_name,
@@ -40,7 +40,7 @@ bool is_string_name_equal(GDExtensionConstStringNamePtr p_a, const char *p_b)
 {
     // Create a StringName for the C string.
     StringName string_name;
-    constructors.string_name_new_with_utf8_chars(&string_name, p_b);
+    constructors.string_name_new_with_latin1_chars(&string_name, p_b, false);
 
     // Compare both StringNames.
     bool is_equal = false;
@@ -79,7 +79,7 @@ void bind_method_0(
 {
 
     StringName method_name_string;
-    constructors.string_name_new_with_utf8_chars(&method_name_string, method_name);
+    constructors.string_name_new_with_latin1_chars(&method_name_string, method_name, false);
 
     GDExtensionClassMethodCall call_func = call_0_args_no_ret;
     GDExtensionClassMethodPtrCall ptrcall_func = ptrcall_0_args_no_ret;
@@ -95,7 +95,7 @@ void bind_method_0(
     };
 
     StringName class_name_string;
-    constructors.string_name_new_with_utf8_chars(&class_name_string, class_name);
+    constructors.string_name_new_with_latin1_chars(&class_name_string, class_name, false);
 
     api.classdb_register_extension_class_method(class_library, &class_name_string, &method_info);
 
@@ -112,7 +112,7 @@ void bind_method_0_r(
     GDExtensionVariantType return_type)
 {
     StringName method_name_string;
-    constructors.string_name_new_with_utf8_chars(&method_name_string, method_name);
+    constructors.string_name_new_with_latin1_chars(&method_name_string, method_name, false);
 
     GDExtensionClassMethodCall call_func = call_0_args_ret_float;
     GDExtensionClassMethodPtrCall ptrcall_func = ptrcall_0_args_ret_float;
@@ -132,7 +132,7 @@ void bind_method_0_r(
     };
 
     StringName class_name_string;
-    constructors.string_name_new_with_utf8_chars(&class_name_string, class_name);
+    constructors.string_name_new_with_latin1_chars(&class_name_string, class_name, false);
 
     api.classdb_register_extension_class_method(class_library, &class_name_string, &method_info);
 
@@ -152,7 +152,7 @@ void bind_method_1(
 {
 
     StringName method_name_string;
-    constructors.string_name_new_with_utf8_chars(&method_name_string, method_name);
+    constructors.string_name_new_with_latin1_chars(&method_name_string, method_name, false);
 
     GDExtensionClassMethodCall call_func = call_1_float_arg_no_ret;
     GDExtensionClassMethodPtrCall ptrcall_func = ptrcall_1_float_arg_no_ret;
@@ -177,7 +177,7 @@ void bind_method_1(
     };
 
     StringName class_name_string;
-    constructors.string_name_new_with_utf8_chars(&class_name_string, class_name);
+    constructors.string_name_new_with_latin1_chars(&class_name_string, class_name, false);
 
     api.classdb_register_extension_class_method(class_library, &class_name_string, &method_info);
 
@@ -195,12 +195,12 @@ void bind_property(
     const char *setter)
 {
     StringName class_string_name;
-    constructors.string_name_new_with_utf8_chars(&class_string_name, class_name);
+    constructors.string_name_new_with_latin1_chars(&class_string_name, class_name, false);
     GDExtensionPropertyInfo info = make_property(type, name);
     StringName getter_name;
-    constructors.string_name_new_with_utf8_chars(&getter_name, getter);
+    constructors.string_name_new_with_latin1_chars(&getter_name, getter, false);
     StringName setter_name;
-    constructors.string_name_new_with_utf8_chars(&setter_name, setter);
+    constructors.string_name_new_with_latin1_chars(&setter_name, setter, false);
 
     api.classdb_register_extension_class_property(class_library, &class_string_name, &info, &setter_name, &getter_name);
 
@@ -219,9 +219,9 @@ void bind_signal_1(
     GDExtensionVariantType arg1_type)
 {
     StringName class_string_name;
-    constructors.string_name_new_with_utf8_chars(&class_string_name, class_name);
+    constructors.string_name_new_with_latin1_chars(&class_string_name, class_name, false);
     StringName signal_string_name;
-    constructors.string_name_new_with_utf8_chars(&signal_string_name, signal_name);
+    constructors.string_name_new_with_latin1_chars(&signal_string_name, signal_name, false);
 
     GDExtensionPropertyInfo args_info[] = {
         make_property(arg1_type, arg1_name),
@@ -352,6 +352,7 @@ void load_api(GDExtensionInterfaceGetProcAddress p_get_proc_address)
     api.classdb_register_extension_class_signal = p_get_proc_address("classdb_register_extension_class_signal");
     api.classdb_construct_object = (GDExtensionInterfaceClassdbConstructObject)p_get_proc_address("classdb_construct_object");
     api.object_set_instance = p_get_proc_address("object_set_instance");
+    api.object_set_instance_binding = p_get_proc_address("object_set_instance_binding");
     api.get_variant_from_type_constructor = (GDExtensionInterfaceGetVariantFromTypeConstructor)p_get_proc_address("get_variant_from_type_constructor");
     api.get_variant_to_type_constructor = (GDExtensionInterfaceGetVariantToTypeConstructor)p_get_proc_address("get_variant_to_type_constructor");
     api.variant_get_type = (GDExtensionInterfaceVariantGetType)p_get_proc_address("variant_get_type");
@@ -361,7 +362,7 @@ void load_api(GDExtensionInterfaceGetProcAddress p_get_proc_address)
     // Constructors.
     constructors.vector2_constructor_x_y = variant_get_ptr_constructor(GDEXTENSION_VARIANT_TYPE_VECTOR2, 3); // See extension_api.json for indices.
     constructors.string_new_with_utf8_chars = p_get_proc_address("string_new_with_utf8_chars");
-    constructors.string_name_new_with_utf8_chars = p_get_proc_address("string_name_new_with_utf8_chars");
+    constructors.string_name_new_with_latin1_chars = (GDExtensionInterfaceStringNameNewWithLatin1Chars)p_get_proc_address("string_name_new_with_latin1_chars");
     constructors.variant_from_float_constructor = api.get_variant_from_type_constructor(GDEXTENSION_VARIANT_TYPE_FLOAT);
     constructors.float_from_variant_constructor = api.get_variant_to_type_constructor(GDEXTENSION_VARIANT_TYPE_FLOAT);
     constructors.variant_from_string_name_constructor = api.get_variant_from_type_constructor(GDEXTENSION_VARIANT_TYPE_STRING_NAME);

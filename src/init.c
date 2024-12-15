@@ -15,23 +15,23 @@ void initialize_gdexample_module(void *p_userdata, GDExtensionInitializationLeve
     StringName native_class_name;
     StringName method_name;
 
-    constructors.string_name_new_with_utf8_chars(&native_class_name, "Object");
-    constructors.string_name_new_with_utf8_chars(&method_name, "emit_signal");
+    constructors.string_name_new_with_latin1_chars(&native_class_name, "Object", false);
+    constructors.string_name_new_with_latin1_chars(&method_name, "emit_signal", false);
     methods.object_emit_signal = api.classdb_get_method_bind(&native_class_name, &method_name, 4047867050);
     destructors.string_name_destructor(&native_class_name);
     destructors.string_name_destructor(&method_name);
 
-    constructors.string_name_new_with_utf8_chars(&native_class_name, "Node2D");
-    constructors.string_name_new_with_utf8_chars(&method_name, "set_position");
+    constructors.string_name_new_with_latin1_chars(&native_class_name, "Node2D", false);
+    constructors.string_name_new_with_latin1_chars(&method_name, "set_position", false);
     methods.node2d_set_position = api.classdb_get_method_bind(&native_class_name, &method_name, 743155724);
     destructors.string_name_destructor(&native_class_name);
     destructors.string_name_destructor(&method_name);
 
     // Register class.
     StringName class_name;
-    constructors.string_name_new_with_utf8_chars(&class_name, "GDExample");
+    constructors.string_name_new_with_latin1_chars(&class_name, "GDExample", false);
     StringName parent_class_name;
-    constructors.string_name_new_with_utf8_chars(&parent_class_name, "Sprite2D");
+    constructors.string_name_new_with_latin1_chars(&parent_class_name, "Sprite2D", false);
 
     GDExtensionClassCreationInfo2 class_info = {
         .is_virtual = false,
@@ -48,12 +48,12 @@ void initialize_gdexample_module(void *p_userdata, GDExtensionInitializationLeve
         .to_string_func = NULL,
         .reference_func = NULL,
         .unreference_func = NULL,
-        .create_instance_func = gdexample_create_instance,
-        .free_instance_func = gdexample_free_instance,
+        .create_instance_func = gdexample_class_create_instance,
+        .free_instance_func = gdexample_class_free_instance,
         .recreate_instance_func = NULL,
         .get_virtual_func = NULL,
-        .get_virtual_call_data_func = gdexample_get_virtual_with_data,
-        .call_virtual_with_data_func = gdexample_call_virtual_with_data,
+        .get_virtual_call_data_func = gdexample_class_get_virtual_with_data,
+        .call_virtual_with_data_func = gdexample_class_call_virtual_with_data,
         .get_rid_func = NULL,
         .class_userdata = NULL,
     };
@@ -61,7 +61,7 @@ void initialize_gdexample_module(void *p_userdata, GDExtensionInitializationLeve
     api.classdb_register_extension_class2(class_library, &class_name, &parent_class_name, &class_info);
 
     // Bind methods.
-    gdexample_bind_methods();
+    gdexample_class_bind_methods();
 
     // Destruct things.
     destructors.string_name_destructor(&class_name);
